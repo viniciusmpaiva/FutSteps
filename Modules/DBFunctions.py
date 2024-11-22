@@ -1,2 +1,2 @@
 class DBFunctions:
-    ...
+    print('Aoba')
