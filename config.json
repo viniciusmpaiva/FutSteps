@@ -1,0 +1,7 @@
+{
+    "host": "dbfutsteps.c1usiq2ee7fg.sa-east-1.rds.amazonaws.com",
+    "port": "5432",
+    "dbname": "futStepsDB",
+    "user": "futsteps",
+    "password": "futsteps"
+}
