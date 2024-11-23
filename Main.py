@@ -1,7 +1,15 @@
-from Modules.Connection import Connection
+from Modules.DBFunctions import select_athlete
 
-connection = Connection.connectToDB()
+# CPF do atleta para consulta
+cpf = '123.456.789-02'
 
-connection.execute('SELECT * FROM ATLETA')
-output = connection.fetchall()
-print(*output, sep = '\n')
+# Consulta o atleta pelo CPF
+output = select_athlete(cpf)
+
+# Imprime o resultado
+if output:
+    print("Informações do atleta:")
+    for row in output:
+        print(row)
+else:
+    print("Nenhum atleta encontrado ou erro na consulta.")
