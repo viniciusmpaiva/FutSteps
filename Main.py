@@ -1,7 +1,8 @@
-from Modules.Connection import Connection
-
-connection = Connection.connectToDB()
-
-connection.execute('SELECT * FROM ATLETA')
-output = connection.fetchall()
-print(*output, sep = '\n')
+# from Modules.Connection import Connection
+from Modules.Interface import Interface
+# connection = Connection.connectToDB()
+# cursor = connection.cursor();
+interface = Interface()
+while True:
+    interface.start()
+    
