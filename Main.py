@@ -1,15 +1,8 @@
-from Modules.DBFunctions import select_athlete
+from Modules.Interface import Interface
 
-# CPF do atleta para consulta
-cpf = '123.456.789-02'
 
-# Consulta o atleta pelo CPF
-output = select_athlete(cpf)
+interface = Interface()
+while True:
+    interface.start()
+    
 
-# Imprime o resultado
-if output:
-    print("Informações do atleta:")
-    for row in output:
-        print(row)
-else:
-    print("Nenhum atleta encontrado ou erro na consulta.")

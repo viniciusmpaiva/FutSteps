@@ -10,7 +10,7 @@ class Connection:
                 config = json.load(file)
             
             # Cria a conexão com o banco de dados
-            connection = psycopg2.connect(
+                connection = psycopg2.connect(
                 host=config["host"],
                 port=config["port"],
                 database=config["dbname"],
@@ -20,4 +20,5 @@ class Connection:
             return connection
         except Exception as e:
             print(f"Erro ao conectar ao banco de dados: {e}")
+            return None
             return None
