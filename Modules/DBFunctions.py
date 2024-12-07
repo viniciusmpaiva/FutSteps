@@ -1,5 +1,8 @@
+import re
 class DBFunctions:
-    print("DBFunctions class is imported")
     
-    def __init__(self):
-        print("DBFunctions class is initialized")
+    def validar_cpf(cpf):
+        padrao_cpf = r"^\d{3}\.\d{3}\.\d{3}-\d{2}$"
+        return bool(re.match(padrao_cpf, cpf))
+        
+    
