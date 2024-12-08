@@ -4,6 +4,7 @@ from Modules.ClubQueryFunctions import ClubQuery
 from Modules.ResponsibleQueryFunctions import ResponsibleQuery
 from Modules.GoalkeeperQueryFunctions import GoalkeeperQuery
 from Modules.Connection import Connection
+from Modules.ValidateFunctions import ValidateFunctions
 import os
 from psycopg2 import errors
 
@@ -19,6 +20,7 @@ class Interface:
         self.responsibleQuery = ResponsibleQuery
         self.goalkeeperQuery = GoalkeeperQuery
         self.connection = Connection.connectToDB()
+        self.validateFunctions = ValidateFunctions
 
     def start(self):
         
@@ -44,7 +46,17 @@ class Interface:
             os.system('clear')
             self.__insertInfoInterface()
 
+        elif (option == 3):
+                exit("\nSaindo...")
+        
+        else:
+            print('OPÇÃO INVÁLIDA, TENTE NOVAMENTE!')
+            self.start()
 
+
+    ############################################################
+    # Função que direciona para a interface de INSERCAO de dados 
+    ############################################################
     def __insertInfoInterface(self):
         os.system('cls')
         option = int(input('QUAL TABELA DESEJA INSERIR: \n1 - INSERIR JOGADOR\n2 - INSERIR CLUBE\n3 - INSERIR RESPONSAVEL\n4 - INSERIR ESTATISTICAS ATLETA LINHA\n5 - INSERIR ESTATISTICAS ATLETA GOLEIRO\n'))
@@ -65,29 +77,32 @@ class Interface:
         print('INSIRA AS ESTATÍSTICAS DO GOLEIRO (*OBRIGATÓRIO)')
         
         #CPF
-        #Procurar CPF na tabela atleta
-        cpf = self.get_valid_input('*INSIRA O CPF DO JOGADOR CADASTRADO(FORMATO XXX.XXX.XXX-X): ', self.validate_cpf, True)
+        cpf = self.validateFunctions.get_valid_input('*INSIRA O CPF DO JOGADOR CADASTRADO(FORMATO XXX.XXX.XXX-X): ', self.validateFunctions.validate_cpf, True)
+        output = self.athleteQuery.select_athlete_cpf_or_name(cpf, 'CPF' ,self.connection)
+        if(len(output) == 0):
+            print('ERRO! CPF DO JOGADOR NÃO ENCONTRADO')
+            return
 
         #Gols sofridos
-        goalsSuffered = self.validade_intInput('INSIRA O NUMERO DE GOLS SOFRIDOS: ')
+        goalsSuffered = self.validateFunctions.validate_intInput('INSIRA O NUMERO DE GOLS SOFRIDOS: ')
         
         #Gols sofridos/partida
-        goalsSufferedPerGame = self.validate_floatInput('INSIRA O NUMERO DE GOLS SOFRIDOS POR PARTIDA: ')
+        goalsSufferedPerGame = self.validateFunctions.validate_floatInput('INSIRA O NUMERO DE GOLS SOFRIDOS POR PARTIDA: ')
         
         #Penaltis defendidos
-        defendedPenalties = self.validade_intInput('INSIRA O NUMERO DE PÊNALTIS DEFENDIDOS: ')   
+        defendedPenalties = self.validateFunctions.validate_intInput('INSIRA O NUMERO DE PÊNALTIS DEFENDIDOS: ')   
     
         #Defesas/jogo
-        savesPerGame = self.validate_floatInput('INSIRA O NUMERO DE DEFESAS POR JOGO: ')
+        savesPerGame = self.validateFunctions.validate_floatInput('INSIRA O NUMERO DE DEFESAS POR JOGO: ')
 
         #Gols sofridos fora da área
-        goalsOutsideBox = self.validade_intInput('INSIRA O NUMERO DE GOLS SOFRIDOS FORA DA ÁREA: ') 
+        goalsOutsideBox = self.validateFunctions.validate_intInput('INSIRA O NUMERO DE GOLS SOFRIDOS FORA DA ÁREA: ') 
 
         #Defesas
-        saves =  self.validade_intInput('INSIRA O NUMERO DE DEFESAS: ')
+        saves =  self.validateFunctions.validate_intInput('INSIRA O NUMERO DE DEFESAS: ')
         
         #Defesas de fora da área
-        savesOutsideBox = self.validade_intInput('INSIRA O NUMERO DE DEFESAS FORA DA ÁREA: ')
+        savesOutsideBox = self.validateFunctions.validate_intInput('INSIRA O NUMERO DE DEFESAS FORA DA ÁREA: ')
 
         #Tratamento de excessoes
         try:
@@ -112,34 +127,37 @@ class Interface:
         print('INSIRA AS ESTATÍSTICAS DO ATLETA DE LINHA (*OBRIGATÓRIO)')
 
         #CPF
-        #Procurar CPF na tabela atleta
-        cpf = self.get_valid_input('*INSIRA O CPF DO JOGADOR CADASTRADO(FORMATO XXX.XXX.XXX-X): ', self.validate_cpf, True)
+        cpf = self.validateFunctions.get_valid_input('*INSIRA O CPF DO JOGADOR CADASTRADO(FORMATO XXX.XXX.XXX-X): ', self.validateFunctions.validate_cpf, True)
+        output = self.athleteQuery.select_athlete_cpf_or_name(cpf, 'CPF' ,self.connection)
+        if(len(output) == 0):
+            print('ERRO! CPF DO JOGADOR NÃO ENCONTRADO')
+            return
 
         #Gols
-        goals = self.validade_intInput('INSIRA O NUMERO DE GOLS: ')
+        goals = self.validateFunctions.validate_intInput('INSIRA O NUMERO DE GOLS: ')
 
         #Assistências
-        assists = self.validade_intInput('INSIRA O NUMERO DE ASSISTÊNCIAS: ')
+        assists = self.validateFunctions.validate_intInput('INSIRA O NUMERO DE ASSISTÊNCIAS: ')
 
         #Mapa de calor
         heatMap = input('INSIRA O MAPA DE CALOR: ')
         os.system('cls')
 
         #Erros capitais
-        capitalErrors = self.validade_intInput('INSIRA O NUMERO DE ERROS CAPITAIS: ')
+        capitalErrors = self.validateFunctions.validate_intInput('INSIRA O NUMERO DE ERROS CAPITAIS: ')
 
         #Chutes por jogo
-        kicksPerGame  = self.validate_floatInput('INSIRA O NUMERO DE CHUTES POR JOGO: ')
+        kicksPerGame  = self.validateFunctions.validate_floatInput('INSIRA O NUMERO DE CHUTES POR JOGO: ')
         
         #Grandes chances criadas
-        bigChancesCreated =  self.validade_intInput('INSIRA O NUMERO DE GRANDES CHANCES CRIADAS: ')
+        bigChancesCreated =  self.validateFunctions.validate_intInput('INSIRA O NUMERO DE GRANDES CHANCES CRIADAS: ')
 
         #Passes completos por jogo
-        completedPassesPerGame = self.validate_floatInput('INSIRA O NUMERO DE PASSES COMPLETOS POR JOGO: ')
+        completedPassesPerGame = self.validateFunctions.validate_floatInput('INSIRA O NUMERO DE PASSES COMPLETOS POR JOGO: ')
 
         #Desarmes por jogo
-        teacklesPerGame = self.validate_floatInput('INSIRA O NUMERO DE DESARMES POR JOGO: ')
-        
+        teacklesPerGame = self.validateFunctions.validate_floatInput('INSIRA O NUMERO DE DESARMES POR JOGO: ')
+            
         #Tratamento de excessoes
         try:
             self.dbFunctions.insert('linha',(cpf,goals, assists, heatMap, capitalErrors, kicksPerGame, bigChancesCreated, completedPassesPerGame, teacklesPerGame), self.connection)
@@ -162,20 +180,24 @@ class Interface:
         print('INSIRA OS DADOS DO RESPONSAVEL (*OBRIGATÓRIO)')
 
         #CPF
-        cpf = self.get_valid_input('*INSIRA O CPF DO RESPONSAVEL (FORMATO XXX.XXX.XXX-X): ', self.validate_cpf, True)
-
+        cpf = self.validateFunctions.get_valid_input('*INSIRA O CPF DO RESPONSAVEL (FORMATO XXX.XXX.XXX-X): ', self.validateFunctions.validate_cpf, True)
+        output = self.athleteQuery.select_athlete_cpf_or_name(cpf, 'CPF' ,self.connection)
+        if(len(output) != 0):
+            print('ERRO! CPF JA INSERIDO!')
+            return
+        
         #Nome
-        name = self.get_valid_input('*INSIRA O NOME DO RESPONSAVEL: ', self.validate_name, True)
+        name = self.validateFunctions.get_valid_input('*INSIRA O NOME DO RESPONSAVEL: ', self.validate_name, True)
 
         #Data de nascimento
         #Dia
-        day = self.get_valid_input('*DATA NASCIMENTO (DD/MM/AAAA): \nDIA: ', self.validate_day, True)
+        day = self.validateFunctions.get_valid_input('*DATA NASCIMENTO (DD/MM/AAAA): \nDIA: ', self.validate_day, True)
 
         #Mes
-        month = self.get_valid_input('MÊS: ', self.validate_month, True)
+        month = self.validateFunctions.get_valid_input('MÊS: ', self.validate_month, True)
 
         #Ano
-        year = self.get_valid_input('ANO: ', self.validate_year, True)
+        year = self.validateFunctions.get_valid_input('ANO: ', self.validate_year, True)
 
         bornDate = f'{month}/{day}/{year}'
 
@@ -207,10 +229,10 @@ class Interface:
         print('INSIRA OS DADOS DO CLUBE (*OBRIGATÓRIO)')
 
         #CNPJ
-        cnpj = self.get_valid_input('*INSIRA O CNPJ DO CLUBE (FORMATO XX.XXX.XXX/XXXX-XX): ', self.validate_cnpj, True)
+        cnpj = self.validateFunctions.get_valid_input('*INSIRA O CNPJ DO CLUBE (FORMATO XX.XXX.XXX/XXXX-XX): ', self.validate_cnpj, True)
 
         #Nome
-        name = self.get_valid_input('*INSIRA O NOME DO CLUBE: ', self.validate_name, True)
+        name = self.validateFunctions.get_valid_input('*INSIRA O NOME DO CLUBE: ', self.validate_name, True)
         
         #Tratamento de excessoes
         try:
@@ -240,46 +262,67 @@ class Interface:
         print("INSIRA OS DADOS DO JOGADOR (*OBRIGATÓRIO)")
 
         #CPF
-        cpf = self.get_valid_input('*INSIRA O CPF DO JOGADOR (FORMATO XXX.XXX.XXX-X): ', self.validate_cpf, True)
+        cpf = self.validateFunctions.get_valid_input('INSIRA O CPF DO JOGADOR (FORMATO XXX.XXX.XXX-X): ', self.validateFunctions.validate_cpf, True)
+        output = self.athleteQuery.select_athlete_cpf_or_name(cpf, 'CPF' ,self.connection)
+        if(len(output) != 0):
+            print('ERRO! CPF JA INSERIDO!')
+            return
 
         #Nome
-        name = self.get_valid_input('*INSIRA O NOME DO JOGADOR: ', self.validate_name, True)
+        name = self.validateFunctions.get_valid_input('*INSIRA O NOME DO JOGADOR: ', self.validateFunctions.validate_name, True)
 
         #Altura
-        height = self.validate_floatInput('INSIRA A ALTURA DO JOGADOR (EM METROS): ')
+        height = self.validateFunctions.validate_floatInput('INSIRA A ALTURA DO JOGADOR (EM METROS): ')
 
         #Peso
-        weight = self.validate_floatInput('INSIRA O PESO DO JOGADOR (EM KG): ')
+        weight = self.validateFunctions.validate_floatInput('INSIRA O PESO DO JOGADOR (EM KG): ')
 
         #Data de nascimento
         print('*DATA NASCIMENTO (DD/MM/AAAA): ')
 
         #Dia
-        day = self.get_valid_input('DIA: ', self.validate_day , True)
+        day = self.validateFunctions.get_valid_input('DIA: ', self.validateFunctions.validate_day , True)
         
         #Mes
-        month = self.get_valid_input('MÊS: ', self.validate_month, True)
+        month = self.validateFunctions.get_valid_input('MÊS: ', self.validateFunctions.validate_month, True)
 
         #Ano
-        year = self.get_valid_input('ANO: ', self.validate_year, True)
+        year = self.validateFunctions.get_valid_input('ANO: ', self.validateFunctions.validate_year, True)
 
         bornDate = f'{month}/{day}/{year}'
 
         #Posicao
-        position = self.get_valid_input('INSIRA A POSIÇÃO DO JOGADOR (LINHA/GOLEIRO): ', self.validade_position, True)
+        position = self.validateFunctions.get_valid_input('INSIRA A POSIÇÃO DO JOGADOR (LINHA/GOLEIRO): ', self.validateFunctions.validate_position, True)
 
         #Numero de jogos
-        numberOfGames = self.validade_intInput('NUMERO DE JOGOS: ')
+        numberOfGames = self.validateFunctions.validate_intInput('NUMERO DE JOGOS: ')
 
         #Numero de jogos como titular
-        numberOfStarterGames = self.validade_intInput('NUMERO DE JOGOS COMO TITULAR: ')
+        numberOfStarterGames = self.validateFunctions.validate_intInput('NUMERO DE JOGOS COMO TITULAR: ')
 
         #Clube
-        club = self.get_valid_input('CNPJ DO CLUBE: ', self.validate_cnpj)
+        club = self.validateFunctions.get_valid_input('CNPJ DO CLUBE: ', self.validateFunctions.validate_cnpj)
+        if(len(club) >0):
+            print('Entrou aqui')
+            output = self.clubQuery.select_club(club, self.connection, 'CNPJ')
+            if(len(output) == 0):
+                print('ERRO! CNPJ DO CLUBE NÃO ENCONTRADO')
+                return
+        else:
+            club = None
 
+       
         #Responsavel
-        guardian = self.get_valid_input('CPF DO RESPONSÁVEL: ', self.validate_cpf)
-
+        guardian = self.validateFunctions.get_valid_input('CPF DO RESPONSÁVEL: ', self.validateFunctions.validate_cpf)
+        if(len(guardian) > 0):
+            output = self.responsibleQuery.select_responsible(guardian, 'CPF' ,self.connection)
+            if(len(output) == 0):
+                print('ERRO! CPF DO RESPONSÁVEL NÃO ENCONTRADO')
+                return
+        else:
+            guardian = None
+    
+        
         #Tratamento de excessoes
         try:
             self.dbFunctions.insert('atleta',(cpf,name,height, weight, bornDate, position, numberOfGames, numberOfStarterGames, club,guardian), self.connection)
@@ -306,17 +349,17 @@ class Interface:
             elif(constraint_name == "ck_posicao_atleta"):
                 print("ERRO! POSIÇÃO INVÁLIDA")
 
-        #FK nao encontrada
-        # except errors.ForeignKeyViolation as e:
-        #     constraint_name = e.diag.constraint_name
+       # FK nao encontrada
+        except errors.ForeignKeyViolation as e:
+            constraint_name = e.diag.constraint_name
 
-        #     #Clube nao encontrado
-        #     if(constraint_name == "fk_atleta_clube"):
-        #         print("ERRO! O CLUBE INSERIDO NÃO ESTÁ CADASTRADO")
+            #Clube nao encontrado
+            if(constraint_name == "fk_atleta_clube"):
+                print("ERRO! O CLUBE INSERIDO NÃO ESTÁ CADASTRADO")
 
-        #     #Responsavel nao encontrado
-        #     elif(constraint_name == "fk_atleta_responsavel"):
-        #         print("ERRO! O RESPONSÁVEL INSERIDO NÃO ESTÁ CADASTRADO")
+            #Responsavel nao encontrado
+            elif(constraint_name == "fk_atleta_responsavel"):
+                print("ERRO! O RESPONSÁVEL INSERIDO NÃO ESTÁ CADASTRADO")
 
         #Erros no peso/altura
         except errors.NumericValueOutOfRange as e:
@@ -329,61 +372,6 @@ class Interface:
         except errors:
             print('ERRO AO INSERIR JOGADOR, TENTE NOVAMENTE !')
             
-        
-
-    #Funcao para validar input
-    def get_valid_input(self, prompt, validation_func , mandatory = False):
-        value = input(prompt)
-        
-        if not value and not mandatory:
-            return value
-        
-        while not validation_func(value):
-            os.system('cls')
-            print('VALOR INVÁLIDO, INSIRA NOVAMENTE!')
-            value = input(prompt)
-        
-        os.system('cls')
-        return value
-
-    
-    #Funcao para validar CPF
-    def validate_cpf(self, cpf):
-        return len(cpf) == 14
-
-    #Funcao para validar nome
-    def validate_name(self, name):
-        return 1 <= len(name) <= 50
-        
-    #Funcao para validar altura e peso
-    def validate_floatInput(self, prompt):
-        floatInput = input(prompt)
-        return round(float(floatInput),2) if floatInput.isdecimal() else None
-
-    #Funcao para validar dia
-    def validate_day(self, day):
-        return day.isdigit() and 1 <= int(day) <= 31
-
-    #Funcao para validar mes
-    def validate_month(self, month):
-        return month.isdigit() and 1 <= int(month) <= 12
-        
-    def validate_year(self, year):
-        return year.isdigit() and len(year) == 4
-
-    def validade_position(self, position):
-        return position.upper() in ['LINHA', 'GOLEIRO']
-
-    def validade_intInput(self, prompt):
-        value = input(prompt)
-        return int(value) if value.isdigit() else None
-
-    def validate_cnpj(self, cnpj):
-        #Procurar cnpj na tabela clube
-        return len(cnpj) == 18
-            
-   elif (option == 3):
-            exit("\nSaindo...")
             
     ############################################################
     # Função que direciona para a interface de CONSULTA de dados 

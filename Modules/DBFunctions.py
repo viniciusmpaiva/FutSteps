@@ -1,3 +1,5 @@
+import re
+
 class DBFunctions:
     def insert(table, data, connection):
         cursor = connection.cursor()
