@@ -19,8 +19,8 @@ class Interface:
         self.clubQuery = ClubQuery
         self.responsibleQuery = ResponsibleQuery
         self.goalkeeperQuery = GoalkeeperQuery
-        self.connection = Connection.connectToDB()
         self.validateFunctions = ValidateFunctions
+        self.connection = Connection.connectToDB()
 
     def start(self):
         
@@ -39,11 +39,11 @@ class Interface:
                            \nAÇÃO: '))
         
         if (option == 1):
-            os.system('clear')
+            os.system('cls  ')
             self.__selectInfoInterface()
             
         elif (option == 2):
-            os.system('clear')
+            os.system('cls  ')
             self.__insertInfoInterface()
 
         elif (option == 3):
@@ -58,7 +58,7 @@ class Interface:
     # Função que direciona para a interface de INSERCAO de dados 
     ############################################################
     def __insertInfoInterface(self):
-        os.system('cls')
+        os.system('cls  ')
         option = int(input('QUAL TABELA DESEJA INSERIR: \n1 - INSERIR JOGADOR\n2 - INSERIR CLUBE\n3 - INSERIR RESPONSAVEL\n4 - INSERIR ESTATISTICAS ATLETA LINHA\n5 - INSERIR ESTATISTICAS ATLETA GOLEIRO\n'))
         if (option == 1 ):
             self.__insertJogador()
@@ -141,7 +141,7 @@ class Interface:
 
         #Mapa de calor
         heatMap = input('INSIRA O MAPA DE CALOR: ')
-        os.system('cls')
+        os.system('cls  ')
 
         #Erros capitais
         capitalErrors = self.validateFunctions.validate_intInput('INSIRA O NUMERO DE ERROS CAPITAIS: ')
@@ -187,17 +187,17 @@ class Interface:
             return
         
         #Nome
-        name = self.validateFunctions.get_valid_input('*INSIRA O NOME DO RESPONSAVEL: ', self.validate_name, True)
+        name = self.validateFunctions.get_valid_input('*INSIRA O NOME DO RESPONSAVEL: ', self.validateFunctions.validate_name, True)
 
         #Data de nascimento
         #Dia
-        day = self.validateFunctions.get_valid_input('*DATA NASCIMENTO (DD/MM/AAAA): \nDIA: ', self.validate_day, True)
+        day = self.validateFunctions.get_valid_input('*DATA NASCIMENTO (DD/MM/AAAA): \nDIA: ', self.validateFunctions.validate_day, True)
 
         #Mes
-        month = self.validateFunctions.get_valid_input('MÊS: ', self.validate_month, True)
+        month = self.validateFunctions.get_valid_input('MÊS: ', self.validateFunctions.validate_month, True)
 
         #Ano
-        year = self.validateFunctions.get_valid_input('ANO: ', self.validate_year, True)
+        year = self.validateFunctions.get_valid_input('ANO: ', self.validateFunctions.validate_year, True)
 
         bornDate = f'{month}/{day}/{year}'
 
@@ -225,14 +225,14 @@ class Interface:
 
     
     def __insertClube(self):
-        os.system('cls')
+        os.system('cls  ')
         print('INSIRA OS DADOS DO CLUBE (*OBRIGATÓRIO)')
 
         #CNPJ
-        cnpj = self.validateFunctions.get_valid_input('*INSIRA O CNPJ DO CLUBE (FORMATO XX.XXX.XXX/XXXX-XX): ', self.validate_cnpj, True)
+        cnpj = self.validateFunctions.get_valid_input('*INSIRA O CNPJ DO CLUBE (FORMATO XX.XXX.XXX/XXXX-XX): ', self.validateFunctions.validate_cnpj, True)
 
         #Nome
-        name = self.validateFunctions.get_valid_input('*INSIRA O NOME DO CLUBE: ', self.validate_name, True)
+        name = self.validateFunctions.get_valid_input('*INSIRA O NOME DO CLUBE: ', self.validateFunctions.validate_name, True)
         
         #Tratamento de excessoes
         try:
@@ -258,7 +258,7 @@ class Interface:
     
 
     def __insertJogador(self):
-        os.system('cls')
+        os.system('cls  ')
         print("INSIRA OS DADOS DO JOGADOR (*OBRIGATÓRIO)")
 
         #CPF
@@ -303,7 +303,6 @@ class Interface:
         #Clube
         club = self.validateFunctions.get_valid_input('CNPJ DO CLUBE: ', self.validateFunctions.validate_cnpj)
         if(len(club) >0):
-            print('Entrou aqui')
             output = self.clubQuery.select_club(club, self.connection, 'CNPJ')
             if(len(output) == 0):
                 print('ERRO! CNPJ DO CLUBE NÃO ENCONTRADO')
@@ -384,22 +383,22 @@ class Interface:
                            \n3 - TABELA RESPONSÁVEL \
                            \nTABELA: '))
         if (option == 1):
-            os.system('clear')
+            os.system('cls  ')
             self.__selectAthlete()
         
         elif (option == 2):
-            os.system('clear')
+            os.system('cls  ')
             self.__selectClub()
             
         elif(option == 3):
-            os.system('clear')
+            os.system('cls  ')
             self.__selectResponsible()
             
     #############################################################################
     # FUNÇÕES DE SELEÇÃO DE DADOS DOS RESPONSÁVEIS
     #############################################################################    
     def __selectResponsible(self):
-        os.system('clear')
+        os.system('cls  ')
         option = int(input('QUAL ATRIBUTO DESEJA CONSULTAR O RESPONSÁVEL: \
                                \n1 - CPF \
                                \n2 - NOME \
@@ -409,7 +408,7 @@ class Interface:
                 cpf = input('*INSIRA O [CPF] DO RESPONSÁVEL O QUAL DESEJA CONSULTAR (FORMATO XXX.XXX.XXX-X): ')
                 
                 while (self.dbFunctions.validar_cpf(cpf) == False):
-                    os.system('clear')
+                    os.system('cls  ')
                     print('O CAMPO "CPF" É OBRIGATÓRIO, INSIRA NOVAMENTE!')
                     cpf = input('*INSIRA O CPF DO RESPONSÁVEL: ')
                     
@@ -421,7 +420,7 @@ class Interface:
                 nome = input('*INSIRA O [NOME] DO RESPONSÁVEL O QUAL DESEJA CONSULTAR : ')
                 
                 while(not nome):
-                    os.system('clear')
+                    os.system('cls  ')
                     print('O CAMPO "NOME" É OBRIGATÓRIO, INSIRA NOVAMENTE!')
                     nome = input('*INSIRA O NOME DO RESPONSÁVEL: ')
                     
@@ -448,17 +447,17 @@ class Interface:
     # FUNÇÕES DE SELEÇÃO DE DADOS DOS CLUBES
     #############################################################################
     def __selectClub(self):
-        os.system('clear')
+        os.system('cls  ')
         nome = input('DIGITE O NOME DO CLUBE PARA OBTER OS DADOS DO CLUBE: ')
         
         #Seleciona o clube pelo nome
         while(not nome):
-            os.system('clear')
+            os.system('cls  ')
             print('O CAMPO "NOME" É OBRIGATÓRIO, INSIRA NOVAMENTE!')
             nome = input('*INSIRA O NOME DO CLUBE: ')
         
         # Consulta o CLUBE no banco de dados com base no ATRIBUTO NOME
-        output = self.clubQuery.select_club(nome, self.connection)
+        output = self.clubQuery.select_club(nome, self.connection, 'NOME')
         
         if output:
             # Exibe as informações do clube
@@ -479,7 +478,7 @@ class Interface:
     # FUNÇÕES DE SELEÇÃO DE DADOS DOS ATLETAS
     ###################################################################################################################
     def __selectAthlete(self):
-        os.system('clear')
+        os.system('cls  ')
         action = int(input('QUAIS AÇÕES DESEJA REALIZAR \n1 - CONSULTAR OS DADOS DO ATLETA \
                                                         \n2 - VISUALIZAR AS ESTATÍSTICAS DO ATLETA DE LINHA \
                                                         \n3 - VISUALIZAR OS ATLETAS QUE MAIS FIZERAM GOLS \
@@ -488,7 +487,7 @@ class Interface:
                                                         \nAÇÃO: '))
         # Consulta os dados do atleta
         if (action == 1):
-            os.system('clear')
+            os.system('cls  ')
             option = int(input('QUAL ATRIBUTO DESEJA CONSULTAR O ATLETA: \
                                \n1 - CPF \
                                \n2 - NOME \
@@ -500,7 +499,7 @@ class Interface:
                 
                 # Validação do CPF
                 while (self.dbFunctions.validar_cpf(cpf) == False):
-                    os.system('clear')
+                    os.system('cls  ')
                     print('O CAMPO "CPF" É OBRIGATÓRIO, INSIRA NOVAMENTE!')
                     cpf = input('*INSIRA O CPF DO JOGADOR: ')
                     
@@ -510,7 +509,7 @@ class Interface:
             elif (option == 2):
                 nome = input('*INSIRA O [NOME] DO JOGADOR O QUAL DESEJA CONSULTAR : ')
                 while(not nome):
-                    os.system('clear')
+                    os.system('cls  ')
                     print('O CAMPO "NOME" É OBRIGATÓRIO, INSIRA NOVAMENTE!')
                     nome = input('*INSIRA O NOME DO JOGADOR: ')
                     
@@ -540,12 +539,12 @@ class Interface:
         
         # Exibe as estatísticas do atleta de linha
         elif (action == 2):
-            os.system('clear')
+            os.system('cls  ')
             cpf = input('*INSIRA O [CPF] DO JOGADOR QUE DESEJA VISUALIZAR AS ESTATÍSTICAS (FORMATO XXX.XXX.XXX-X): ')
             
             # Validação do CPF
             while (self.dbFunctions.validar_cpf(cpf) == False):
-                os.system('clear')
+                os.system('cls  ')
                 print('O CAMPO "CPF" É OBRIGATÓRIO, INSIRA NOVAMENTE!')
                 cpf = input('*INSIRA O CPF DO JOGADOR: ')
                 
@@ -615,12 +614,12 @@ class Interface:
                 
         # Exibe as estatísticas do goleiro
         elif (action == 5):
-            os.system('clear')
+            os.system('cls  ')
             cpf = input('*INSIRA O [CPF] DO JOGADOR QUE DESEJA VISUALIZAR AS ESTATÍSTICAS (FORMATO XXX.XXX.XXX-X): ')
             
             # Validação do CPF
             while (self.dbFunctions.validar_cpf(cpf) == False):
-                os.system('clear')
+                os.system('cls  ')
                 print('O CAMPO "CPF" É OBRIGATÓRIO, INSIRA NOVAMENTE!')
                 cpf = input('*INSIRA O CPF DO JOGADOR: ')
                 
